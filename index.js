@@ -17,9 +17,9 @@ const sendDispatch = async () => {
         url,
         {
             method: 'POST',
-            body: {
+            body: JSON.stringify({
                 event_type: eventType
-            },
+            }),
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/vnd.github.everest-preview+json',
