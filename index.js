@@ -28,11 +28,10 @@ const sendDispatch = async () => {
             },
         });
 
-    return response.json();
+    console.log(`Event dispatched: ${eventType}`);
 }
 
 sendDispatch()
-    .then(data => console.log('Result from dispatch', data))
     .catch(error => {
         console.error('Error dispatching event', error);
         core.setFailed(error.message);
