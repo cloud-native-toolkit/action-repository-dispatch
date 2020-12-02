@@ -1,0 +1,13 @@
+name: Repository dispatch
+description: Sends a repository dispatch event to another repository
+inputs:
+  notifyRepo:
+    description: "The Git slug for the repository that should be notified. Expected format `{owner}/{repo}`"
+    required: true
+  eventType:
+    description: "The type of event that should be dispatched"
+    required: false
+    default: released
+runs:
+  using: node12
+  main: index.js

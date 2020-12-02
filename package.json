@@ -1,0 +1,27 @@
+{
+  "name": "action-repository-dispatch",
+  "version": "0.1.0",
+  "description": "Github Action to sends a repository dispatch event to another repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibm-garage-cloud/action-repository-dispatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ibm-garage-cloud/action-repository-dispatch/issues"
+  },
+  "homepage": "https://github.com/ibm-garage-cloud/action-repository-dispatch#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "axios": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0"
+  }
+}
