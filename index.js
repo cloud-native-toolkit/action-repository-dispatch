@@ -7,8 +7,14 @@ const sendDispatch = async () => {
 
     const gitToken = process.env.GITHUB_TOKEN;
 
+    core.setCommandEcho(true);
+
+    const url = `https://api.github.com/repos/${notifyRepo}/dispatches`;
+
+    console.log(`Dispatching event: ${url}`);
+
     const response = await fetch(
-        `https://api.github.com/repos/${notifyRepo}/dispatches`,
+        url,
         {
             method: 'POST',
             body: {
@@ -24,4 +30,9 @@ const sendDispatch = async () => {
     return response.json();
 }
 
-sendDispatch().catch(error => core.setFailed(error.message));
+sendDispatch()
+    .then(data => console.log('Result from dispatch', data))
+    .catch(error => {
+        console.error('Error dispatching event', error);
+        core.setFailed(error.message);
+    });
