@@ -10,7 +10,7 @@ const sendDispatch = async () => {
     core.setCommandEcho(true);
 
     const url = `https://api.github.com/repos/${notifyRepo}/dispatches`;
-    const bodu = JSON.stringify({
+    const body = JSON.stringify({
         event_type: eventType
     });
 
