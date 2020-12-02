@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const axios = require('axios');
+const fetch = require('node-fetch');
 
 const sendDispatch = async () => {
     const notifyRepo = core.getInput('notifyRepo');
@@ -7,20 +7,21 @@ const sendDispatch = async () => {
 
     const gitToken = process.env.GITHUB_TOKEN;
 
-    const response = await axios.post(
+    const response = await fetch(
         `https://api.github.com/repos/${notifyRepo}/dispatches`,
         {
-            event_type: eventType
-        },
-        {
+            method: 'POST',
+            body: {
+                event_type: eventType
+            },
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/vnd.github.everest-preview+json',
-                Authorization: `Bearer ${gitToken}`,
+                Authorization: `token ${gitToken}`,
             },
         });
 
-    return response.data;
+    return response.json();
 }
 
 sendDispatch().catch(error => core.setFailed(error.message));
