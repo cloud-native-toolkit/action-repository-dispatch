@@ -10,16 +10,17 @@ const sendDispatch = async () => {
     core.setCommandEcho(true);
 
     const url = `https://api.github.com/repos/${notifyRepo}/dispatches`;
+    const bodu = JSON.stringify({
+        event_type: eventType
+    });
 
-    console.log(`Dispatching event: ${url}`);
+    console.log(`Dispatching event: ${url}`, body);
 
     const response = await fetch(
         url,
         {
             method: 'POST',
-            body: JSON.stringify({
-                event_type: eventType
-            }),
+            body,
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/vnd.github.everest-preview+json',
