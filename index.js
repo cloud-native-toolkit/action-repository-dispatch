@@ -1,38 +1,39 @@
 const core = require('@actions/core');
-const fetch = require('node-fetch');
+const github = require('@actions/github');
+const util = require('util');
 
 const sendDispatch = async () => {
     const notifyRepo = core.getInput('notifyRepo');
-    const eventType = core.getInput('eventType');
-
-    const gitToken = process.env.GITHUB_TOKEN;
+    const event_type = core.getInput('eventType');
+    const token = process.env.GITHUB_TOKEN;
 
     core.setCommandEcho(true);
 
-    const url = `https://api.github.com/repos/${notifyRepo}/dispatches`;
-    const body = JSON.stringify({
-        event_type: eventType
-    });
+    const context = github.context;
 
-    console.log(`Dispatching event: ${url}`, body);
+    const [owner, repo] = notifyRepo.split('/');
 
-    const response = await fetch(
-        url,
-        {
-            method: 'POST',
-            body,
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/vnd.github.everest-preview+json',
-                Authorization: `token ${gitToken}`,
-            },
-        });
+    const octokit = github.getOctokit(token);
 
-    console.log(`Event dispatched: ${eventType}`);
+    await octokit.repos.createDispatchEvent({
+        owner,
+        repo,
+        event_type,
+        client_payload: {
+            repo: context.repo,
+            ref: context.ref,
+            sha: context.sha,
+        }
+    })
 }
 
 sendDispatch()
     .catch(error => {
-        console.error('Error dispatching event', error);
-        core.setFailed(error.message);
+        core.debug(util.inspect(error));
+
+        if (error.status === 404) {
+            core.setFailed('Repository not found OR token does not have sufficient permission');
+        } else {
+            core.setFailed(error.message);
+        }
     });
