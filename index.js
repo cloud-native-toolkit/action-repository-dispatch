@@ -12,18 +12,22 @@ const sendDispatch = async () => {
     const context = github.context;
 
     const [owner, repo] = notifyRepo.split('/');
+    const client_payload = {
+        repo: `${context.repo.owner}/${context.repo.repo}`,
+        ref: context.ref,
+        sha: context.sha,
+    }
 
     const octokit = github.getOctokit(token);
+
+    core.info('Creating ' + event_type + ' respository dispatch for ' + notifyRepo);
+    core.debug('Client payload: ' + JSON.stringify(client_payload));
 
     await octokit.repos.createDispatchEvent({
         owner,
         repo,
         event_type,
-        client_payload: {
-            repo: context.repo,
-            ref: context.ref,
-            sha: context.sha,
-        }
+        client_payload,
     })
 }
 
